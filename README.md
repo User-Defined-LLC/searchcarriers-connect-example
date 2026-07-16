@@ -2,7 +2,9 @@
 
 A working reference implementation for building a server-rendered web application with [SearchCarriers Connect](https://searchcarriers.com/developer/integrations/connect).
 
-This repository is a small carrier research product called **Carrier Signal Desk**. It demonstrates the complete OAuth 2.0 Authorization Code flow with PKCE, then uses the connected account for company search, company details, risk signals, vetting reports, company watches, and an illustrative score derived from the returned data.
+This repository is a small carrier research product called **Carrier Signal Desk**. Its sketchbook interface demonstrates the complete OAuth 2.0 Authorization Code flow with PKCE, then uses the connected account for company search, company details, risk signals, vetting reports, company watches, and an illustrative score derived from the returned data.
+
+**Use this repository as the implementation companion to the [SearchCarriers Connect developer documentation](https://searchcarriers.com/developer/integrations/connect).** Clone and run it before starting a new integration, then keep its OAuth, API client, scope-gating, and server route files open alongside the endpoint reference. The app is deliberately small enough to trace end to end without reducing the example to an OAuth token tester.
 
 > This is sample code, not a hosted SearchCarriers product. Review the [production checklist](docs/PRODUCTION_CHECKLIST.md) before adapting it for a real application.
 
@@ -17,6 +19,17 @@ This repository is a small carrier research product called **Carrier Signal Desk
 - An example Carrier Readiness Score that turns returned company, risk, BASIC, and vetting data into transparent product logic
 - A small server-side proxy so bearer tokens never reach browser JavaScript
 - Tests for the OAuth flow and entitlement-sensitive field selection
+
+## Recommended learning path
+
+1. Run Carrier Signal Desk locally and complete the real SearchCarriers consent flow.
+2. Search for a carrier and open its company profile.
+3. Compare the UI's **Latest API response** inspector with the generated Connect endpoint reference.
+4. Reconnect with fewer scopes and observe how `/api/connect/v1/me` changes the available controls and requested company fields.
+5. Trace one request from [`public/app.js`](public/app.js), through [`src/server.ts`](src/server.ts) and [`src/connect-client.ts`](src/connect-client.ts), to `/api/connect/v1/*`.
+6. Adapt the same boundaries in your own framework: browser session, trusted application server, OAuth token storage, Connect client, and scope-aware product UI.
+
+The handwritten notebook styling is intentionally separate from the integration architecture. You can replace the interface while retaining the server-side OAuth and Connect patterns.
 
 ## Prerequisites
 
@@ -120,6 +133,18 @@ The important implementation files are:
 | [`src/connect-fields.ts`](src/connect-fields.ts) | Maps live scope availability to optional company field sections |
 | [`src/carrier-score.ts`](src/carrier-score.ts) | Builds the transparent illustrative score from returned Connect data |
 | [`public/app.js`](public/app.js) | Example workflow and scope-aware UI |
+
+### Read the code in this order
+
+| Step | Start here | What to take into your app |
+| --- | --- | --- |
+| 1 | [`src/config.ts`](src/config.ts) | Validate OAuth origins, credentials, redirect URL, and requested scopes at startup |
+| 2 | [`src/oauth.ts`](src/oauth.ts) | Generate PKCE and `state` for each authorization attempt |
+| 3 | [`src/connect-client.ts`](src/connect-client.ts) | Exchange codes, rotate refresh tokens, attach bearer tokens, and normalize API failures |
+| 4 | [`src/server.ts`](src/server.ts) | Keep credentials server-side and expose only narrow application routes to browser JavaScript |
+| 5 | [`src/connect-fields.ts`](src/connect-fields.ts) | Convert live `available_scopes` into safe company field requests |
+| 6 | [`src/carrier-score.ts`](src/carrier-score.ts) | Build an app-specific feature from only the data the connection can currently return |
+| 7 | [`public/app.js`](public/app.js) | Reflect connection and capability changes in the product UI |
 
 ## Requested scopes vs. available scopes
 

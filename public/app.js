@@ -37,6 +37,7 @@ const elements = {
   scoreValue: document.querySelector('#score-value'),
   searchButton: document.querySelector('#search-button'),
   searchEmpty: document.querySelector('#search-empty'),
+  searchEmptyCopy: document.querySelector('#search-empty-copy'),
   searchForm: document.querySelector('#search-form'),
   searchInput: document.querySelector('#search-input'),
   searchMeta: document.querySelector('#search-meta'),
@@ -135,7 +136,7 @@ function renderSession(session) {
     elements.connectionStatus.textContent = 'Not connected';
     elements.connectionStatus.dataset.connected = 'false';
     elements.accountDescription.textContent = 'Connect a SearchCarriers account to begin.';
-    elements.searchEmpty.textContent = 'Connect an account, then search for a carrier.';
+    elements.searchEmptyCopy.textContent = 'Connect an account, then search for a carrier.';
     renderScopes([]);
     updateScopeOptions();
     return;
@@ -144,7 +145,7 @@ function renderSession(session) {
   elements.connectionStatus.textContent = 'Connected';
   elements.connectionStatus.dataset.connected = 'true';
   elements.accountDescription.textContent = `${session.user.name} · ${session.user.email}`;
-  elements.searchEmpty.textContent = 'Enter a company name or identifier to search.';
+  elements.searchEmptyCopy.textContent = 'Enter a company name or identifier to search.';
   renderScopes(state.availableScopes);
   updateScopeOptions();
 }
@@ -191,7 +192,7 @@ function renderSearchResults(payload) {
   setHidden(elements.searchMeta, items.length === 0);
 
   if (items.length === 0) {
-    elements.searchEmpty.textContent = 'No companies matched that search.';
+    elements.searchEmptyCopy.textContent = 'No companies matched that search.';
     return;
   }
 

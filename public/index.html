@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#111827" />
+    <meta name="theme-color" content="#252338" />
     <title>Carrier Signal Desk | SearchCarriers Connect Example</title>
     <link rel="icon" href="/searchcarriers-icon.png" />
     <link rel="stylesheet" href="/styles.css" />
@@ -18,7 +18,7 @@
           <img src="/searchcarriers-icon.png" width="36" height="36" alt="" />
           <span>
             <strong>Carrier Signal Desk</strong>
-            <small>SearchCarriers Connect example</small>
+            <small>A SearchCarriers Connect field notebook</small>
           </span>
         </a>
         <div class="connection-status" id="connection-status" role="status" aria-live="polite">
@@ -30,8 +30,8 @@
     <main id="main-content" class="page-shell">
       <section class="account-band" aria-labelledby="account-heading">
         <div>
-          <p class="eyebrow">Connected account</p>
-          <h1 id="account-heading">Carrier research workspace</h1>
+          <p class="eyebrow">Field note 01 · Connected account</p>
+          <h1 id="account-heading"><span>Carrier research</span> notebook</h1>
           <p id="account-description">Connect a SearchCarriers account to begin.</p>
         </div>
         <div class="account-actions">
@@ -44,7 +44,7 @@
 
       <section class="scope-band hidden" id="scope-section" aria-labelledby="scope-heading">
         <div>
-          <h2 id="scope-heading">Available scopes</h2>
+          <h2 id="scope-heading">Access in this notebook</h2>
           <p>These are the currently usable scopes returned by <code>/api/connect/v1/me</code>.</p>
         </div>
         <div class="scope-list" id="scope-list"></div>
@@ -74,7 +74,10 @@
                 <button class="button button-primary" id="search-button" type="submit" disabled>Search</button>
               </div>
             </form>
-            <div id="search-empty" class="empty-state">Connect an account, then search for a carrier.</div>
+            <div id="search-empty" class="empty-state">
+              <span class="empty-note" aria-hidden="true">start here</span>
+              <span id="search-empty-copy">Connect an account, then search for a carrier.</span>
+            </div>
             <p id="search-meta" class="search-meta hidden" aria-live="polite"></p>
             <div id="search-results" class="result-list" aria-live="polite"></div>
           </section>
@@ -108,6 +111,7 @@
             </fieldset>
 
             <section class="score-band hidden" id="score-band" aria-labelledby="score-heading">
+              <span class="score-note" aria-hidden="true">derived from live carrier data</span>
               <div class="score-value" aria-hidden="true"><strong id="score-value">--</strong><span>/100</span></div>
               <div class="score-copy">
                 <p class="eyebrow">Illustrative derived product</p>
@@ -176,7 +180,10 @@
     </main>
 
     <footer>
-      <p>Tokens remain on the server. The browser receives only this example app’s session cookie.</p>
+      <p>
+        <strong>Private by design.</strong> Tokens remain on the server. The browser receives only this example app’s
+        session cookie.
+      </p>
     </footer>
   </body>
 </html>

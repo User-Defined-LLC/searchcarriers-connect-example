@@ -2,6 +2,8 @@
 
 The example keeps its dependencies and infrastructure intentionally small. Complete these items before adapting it for production.
 
+Follow the implementation boundaries in the repository rather than copying isolated snippets: OAuth and token work belongs in [`src/oauth.ts`](../src/oauth.ts) and [`src/connect-client.ts`](../src/connect-client.ts), trusted proxy routes belong in [`src/server.ts`](../src/server.ts), and live scope-to-field decisions belong in [`src/connect-fields.ts`](../src/connect-fields.ts). The [SearchCarriers Connect developer documentation](https://searchcarriers.com/developer/integrations/connect) remains the authority for endpoint parameters and response schemas.
+
 ## OAuth and credentials
 
 - Register every production redirect URI exactly in the SearchCarriers developer app.
