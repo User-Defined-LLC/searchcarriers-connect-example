@@ -92,6 +92,10 @@ export function createApp(config: AppConfig): express.Express {
       code_challenge_method: 'S256',
     });
 
+    if (config.oauthPrompt) {
+      parameters.set('prompt', config.oauthPrompt);
+    }
+
     response.redirect(`${config.searchCarriersBaseUrl}/oauth/authorize?${parameters.toString()}`);
   });
 

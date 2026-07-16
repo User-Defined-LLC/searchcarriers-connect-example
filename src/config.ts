@@ -8,6 +8,7 @@ export type AppConfig = {
   clientId: string;
   clientSecret: string;
   scopes: string[];
+  oauthPrompt?: string;
   production: boolean;
 };
 
@@ -36,6 +37,16 @@ export function loadConfig(): AppConfig {
     .split(/\s+/)
     .map((scope) => scope.trim())
     .filter(Boolean);
+  const oauthPrompt = process.env.SC_OAUTH_PROMPT?.trim();
+
+  if (oauthPrompt) {
+    const promptValues = oauthPrompt.split(/\s+/);
+    const allowedPromptValues = new Set(['none', 'login', 'consent']);
+
+    if (promptValues.some((value) => !allowedPromptValues.has(value)) || (promptValues.includes('none') && promptValues.length > 1)) {
+      throw new Error('SC_OAUTH_PROMPT must contain login, consent, or none; none cannot be combined.');
+    }
+  }
 
   return {
     port,
@@ -45,6 +56,7 @@ export function loadConfig(): AppConfig {
     clientId: required('SC_CLIENT_ID'),
     clientSecret: required('SC_CLIENT_SECRET'),
     scopes,
+    oauthPrompt: oauthPrompt || undefined,
     production: process.env.NODE_ENV === 'production',
   };
 }

@@ -13,6 +13,7 @@ const config: AppConfig = {
   clientId: 'example-client-id',
   clientSecret: 'example-client-secret',
   scopes: ['search', 'company:read', 'risk:read', 'vetting:read'],
+  oauthPrompt: 'login consent',
   production: false,
 };
 
@@ -39,6 +40,7 @@ describe('reference app OAuth flow', () => {
     assert.equal(location.searchParams.get('redirect_uri'), 'http://localhost:3000/auth/callback');
     assert.equal(location.searchParams.get('response_type'), 'code');
     assert.equal(location.searchParams.get('scope'), config.scopes.join(' '));
+    assert.equal(location.searchParams.get('prompt'), 'login consent');
     assert.equal(location.searchParams.get('code_challenge_method'), 'S256');
     assert.ok(location.searchParams.get('state'));
     assert.ok(location.searchParams.get('code_challenge'));

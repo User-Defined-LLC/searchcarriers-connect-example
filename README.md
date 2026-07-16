@@ -74,6 +74,8 @@ SC_BASE_URL=http://oauth2-third-party-integr.test
 
 The redirect URI in SearchCarriers must exactly match `${APP_BASE_URL}/auth/callback`.
 
+The example configuration sets `SC_OAUTH_PROMPT=consent`, which deliberately shows the grant screen again when an account previously authorized the same app and scopes. SearchCarriers may otherwise reuse an existing active grant, which is standard OAuth behavior. For account-switching tests, use `SC_OAUTH_PROMPT=login consent` to require both login and consent.
+
 ## 3. Run it
 
 ```bash
