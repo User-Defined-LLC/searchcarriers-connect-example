@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111827" />
+    <title>SearchCarriers Connect Reference App</title>
+    <link rel="icon" href="/searchcarriers-icon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="app-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="SearchCarriers Connect reference app home">
+          <img src="/searchcarriers-icon.png" width="36" height="36" alt="" />
+          <span>
+            <strong>SearchCarriers Connect</strong>
+            <small>Reference application</small>
+          </span>
+        </a>
+        <div class="connection-status" id="connection-status" role="status" aria-live="polite">
+          Checking connection…
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-shell">
+      <section class="account-band" aria-labelledby="account-heading">
+        <div>
+          <p class="eyebrow">Connected account</p>
+          <h1 id="account-heading">Carrier research workspace</h1>
+          <p id="account-description">Connect a SearchCarriers account to begin.</p>
+        </div>
+        <div class="account-actions">
+          <a class="button button-primary" id="connect-button" href="/auth/connect">Connect SearchCarriers</a>
+          <button class="button button-secondary hidden" id="disconnect-button" type="button">Forget local connection</button>
+        </div>
+      </section>
+
+      <div id="message" class="message hidden" role="alert"></div>
+
+      <section class="scope-band hidden" id="scope-section" aria-labelledby="scope-heading">
+        <div>
+          <h2 id="scope-heading">Available scopes</h2>
+          <p>These are the currently usable scopes returned by <code>/api/connect/v1/me</code>.</p>
+        </div>
+        <div class="scope-list" id="scope-list"></div>
+      </section>
+
+      <section class="workspace" aria-label="Connect API workspace">
+        <div class="primary-column">
+          <section class="tool-panel" aria-labelledby="search-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">GET /api/connect/v1/search</p>
+                <h2 id="search-heading">Find a company</h2>
+              </div>
+            </div>
+            <form id="search-form" class="search-form">
+              <label for="search-input">Company name, DOT number, MC number, phone, or email</label>
+              <div class="input-row">
+                <input
+                  id="search-input"
+                  name="q"
+                  type="search"
+                  autocomplete="off"
+                  placeholder="Example: Acme Logistics…"
+                  maxlength="200"
+                  disabled
+                />
+                <button class="button button-primary" id="search-button" type="submit" disabled>Search</button>
+              </div>
+            </form>
+            <div id="search-empty" class="empty-state">Connect an account, then search for a carrier.</div>
+            <div id="search-results" class="result-list" aria-live="polite"></div>
+          </section>
+
+          <section class="tool-panel hidden" id="company-panel" aria-labelledby="company-heading">
+            <div class="panel-heading company-heading-row">
+              <div>
+                <p class="eyebrow">GET /api/connect/v1/company/{dotNumber}</p>
+                <h2 id="company-heading">Company details</h2>
+              </div>
+              <span class="dot-badge" id="company-dot"></span>
+            </div>
+
+            <fieldset class="data-options">
+              <legend>Optional plan-enabled data</legend>
+              <label id="risk-option">
+                <input type="checkbox" id="include-risk" disabled />
+                <span>
+                  <strong>Risk signals</strong>
+                  <small>Requires <code>risk:read</code></small>
+                </span>
+              </label>
+              <label id="vetting-option">
+                <input type="checkbox" id="include-vetting" disabled />
+                <span>
+                  <strong>Vetting report</strong>
+                  <small>Requires <code>vetting:read</code></small>
+                </span>
+              </label>
+              <button class="button button-secondary" id="reload-company" type="button">Reload details</button>
+            </fieldset>
+
+            <dl class="company-summary" id="company-summary"></dl>
+          </section>
+        </div>
+
+        <aside class="secondary-column" aria-label="Connection details">
+          <section class="inspector-panel" aria-labelledby="response-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Developer inspector</p>
+                <h2 id="response-heading">Latest response</h2>
+              </div>
+              <span id="response-status" class="response-status">Idle</span>
+            </div>
+            <code id="request-path" class="request-path">No request yet</code>
+            <pre id="response-json" tabindex="0">{}</pre>
+          </section>
+
+          <section class="watch-panel hidden" id="watch-panel" aria-labelledby="watch-heading">
+            <p class="eyebrow">GET /api/connect/v1/watches</p>
+            <h2 id="watch-heading">Company watches</h2>
+            <p>The connected user granted watch-list access.</p>
+            <button class="button button-secondary" id="load-watches" type="button">Load watches</button>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <p>Tokens remain on the server. The browser receives only this example app’s session cookie.</p>
+    </footer>
+  </body>
+</html>
