@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111827" />
-    <title>SearchCarriers Connect Reference App</title>
+    <title>Carrier Signal Desk | SearchCarriers Connect Example</title>
     <link rel="icon" href="/searchcarriers-icon.png" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/app.js" defer></script>
@@ -14,11 +14,11 @@
 
     <header class="app-header">
       <div class="header-inner">
-        <a class="brand" href="/" aria-label="SearchCarriers Connect reference app home">
+        <a class="brand" href="/" aria-label="Carrier Signal Desk home">
           <img src="/searchcarriers-icon.png" width="36" height="36" alt="" />
           <span>
-            <strong>SearchCarriers Connect</strong>
-            <small>Reference application</small>
+            <strong>Carrier Signal Desk</strong>
+            <small>SearchCarriers Connect example</small>
           </span>
         </a>
         <div class="connection-status" id="connection-status" role="status" aria-live="polite">
@@ -75,6 +75,7 @@
               </div>
             </form>
             <div id="search-empty" class="empty-state">Connect an account, then search for a carrier.</div>
+            <p id="search-meta" class="search-meta hidden" aria-live="polite"></p>
             <div id="search-results" class="result-list" aria-live="polite"></div>
           </section>
 
@@ -82,7 +83,7 @@
             <div class="panel-heading company-heading-row">
               <div>
                 <p class="eyebrow">GET /api/connect/v1/company/{dotNumber}</p>
-                <h2 id="company-heading">Company details</h2>
+                <h2 id="company-heading">Company profile</h2>
               </div>
               <span class="dot-badge" id="company-dot"></span>
             </div>
@@ -106,29 +107,70 @@
               <button class="button button-secondary" id="reload-company" type="button">Reload details</button>
             </fieldset>
 
+            <section class="score-band hidden" id="score-band" aria-labelledby="score-heading">
+              <div class="score-value" aria-hidden="true"><strong id="score-value">--</strong><span>/100</span></div>
+              <div class="score-copy">
+                <p class="eyebrow">Illustrative derived product</p>
+                <h3 id="score-heading">Carrier Readiness Score</h3>
+                <p><strong id="score-rating"></strong> · <span id="score-coverage"></span> data coverage</p>
+                <p class="score-disclaimer" id="score-disclaimer"></p>
+              </div>
+              <div class="score-factors" id="score-factors"></div>
+            </section>
+
             <dl class="company-summary" id="company-summary"></dl>
+
+            <section class="data-section hidden" id="risk-section" aria-labelledby="risk-heading">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Plan-enabled analysis</p>
+                  <h3 id="risk-heading">Risk signals</h3>
+                </div>
+                <span class="section-count" id="risk-count"></span>
+              </div>
+              <div class="score-grid hidden" id="basic-scores"></div>
+              <div class="signal-list" id="risk-list"></div>
+            </section>
+
+            <section class="data-section hidden" id="vetting-section" aria-labelledby="vetting-heading">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Vetting Engine</p>
+                  <h3 id="vetting-heading">Vetting report</h3>
+                </div>
+                <span class="vetting-result" id="vetting-result"></span>
+              </div>
+              <div class="evaluation-list" id="evaluation-list"></div>
+            </section>
           </section>
         </div>
 
         <aside class="secondary-column" aria-label="Connection details">
-          <section class="inspector-panel" aria-labelledby="response-heading">
+          <section class="watch-panel hidden" id="watch-panel" aria-labelledby="watch-heading">
             <div class="panel-heading">
               <div>
-                <p class="eyebrow">Developer inspector</p>
-                <h2 id="response-heading">Latest response</h2>
+                <p class="eyebrow">GET /api/connect/v1/watches</p>
+                <h2 id="watch-heading">Watched companies</h2>
               </div>
-              <span id="response-status" class="response-status">Idle</span>
+              <button class="button button-compact button-secondary" id="load-watches" type="button">Refresh</button>
             </div>
-            <code id="request-path" class="request-path">No request yet</code>
-            <pre id="response-json" tabindex="0">{}</pre>
+            <p id="watch-empty">No company watches loaded.</p>
+            <div class="watch-list" id="watch-results" aria-live="polite"></div>
           </section>
 
-          <section class="watch-panel hidden" id="watch-panel" aria-labelledby="watch-heading">
-            <p class="eyebrow">GET /api/connect/v1/watches</p>
-            <h2 id="watch-heading">Company watches</h2>
-            <p>The connected user granted watch-list access.</p>
-            <button class="button button-secondary" id="load-watches" type="button">Load watches</button>
-          </section>
+          <details class="inspector-panel">
+            <summary>
+              <span>
+                <span class="eyebrow">Developer inspector</span>
+                <strong id="response-heading">Latest API response</strong>
+              </span>
+              <span id="response-status" class="response-status">Idle</span>
+            </summary>
+            <div class="inspector-content">
+              <code id="request-path" class="request-path">No request yet</code>
+              <pre id="response-json" tabindex="0">{}</pre>
+            </div>
+          </details>
         </aside>
       </section>
     </main>

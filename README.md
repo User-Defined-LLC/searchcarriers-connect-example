@@ -2,7 +2,7 @@
 
 A working reference implementation for building a server-rendered web application with [SearchCarriers Connect](https://searchcarriers.com/developer/integrations/connect).
 
-This repository demonstrates the complete OAuth 2.0 Authorization Code flow with PKCE, server-side token storage, refresh-token rotation, live scope discovery, company search, company details, risk signals, vetting reports, and company watches.
+This repository is a small carrier research product called **Carrier Signal Desk**. It demonstrates the complete OAuth 2.0 Authorization Code flow with PKCE, then uses the connected account for company search, company details, risk signals, vetting reports, company watches, and an illustrative score derived from the returned data.
 
 > This is sample code, not a hosted SearchCarriers product. Review the [production checklist](docs/PRODUCTION_CHECKLIST.md) before adapting it for a real application.
 
@@ -14,6 +14,7 @@ This repository demonstrates the complete OAuth 2.0 Authorization Code flow with
 - Automatic refresh before expiry and one retry after an API `401`
 - `GET /api/connect/v1/me` as the source for the connection's currently usable scopes
 - UI and API requests that adapt when `risk:read`, `vetting:read`, or `watches:read` is unavailable
+- An example Carrier Readiness Score that turns returned company, risk, BASIC, and vetting data into transparent product logic
 - A small server-side proxy so bearer tokens never reach browser JavaScript
 - Tests for the OAuth flow and entitlement-sensitive field selection
 
@@ -79,7 +80,9 @@ The redirect URI in SearchCarriers must exactly match `${APP_BASE_URL}/auth/call
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000), select **Connect SearchCarriers**, and approve the grant. The workspace can then search for a company, load its profile, and conditionally request risk or vetting data.
+Open [http://localhost:3000](http://localhost:3000), select **Connect SearchCarriers**, and approve the grant. Carrier Signal Desk can then search for a company, load its profile, conditionally request risk or vetting data, and calculate an illustrative Carrier Readiness Score from the data that was actually available.
+
+The score is intentionally simple and fully explained in [`src/carrier-score.ts`](src/carrier-score.ts). It is not an official SearchCarriers score; it shows how an integration can transform authorized API data into its own domain-specific workflow.
 
 ## How the flow works
 
@@ -113,6 +116,7 @@ The important implementation files are:
 | [`src/connect-client.ts`](src/connect-client.ts) | Token exchange, refresh rotation, bearer requests, and API errors |
 | [`src/server.ts`](src/server.ts) | OAuth routes, server session, and browser-safe API proxy |
 | [`src/connect-fields.ts`](src/connect-fields.ts) | Maps live scope availability to optional company field sections |
+| [`src/carrier-score.ts`](src/carrier-score.ts) | Builds the transparent illustrative score from returned Connect data |
 | [`public/app.js`](public/app.js) | Example workflow and scope-aware UI |
 
 ## Requested scopes vs. available scopes

@@ -3,6 +3,7 @@ import session from 'express-session';
 import helmet from 'helmet';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { buildExampleCarrierScore } from './carrier-score.js';
 import { buildCompanyFields } from './connect-fields.js';
 import { ConnectApiError, connectRequest, exchangeAuthorizationCode } from './connect-client.js';
 import { loadConfig, type AppConfig } from './config.js';
@@ -24,6 +25,18 @@ function errorMessage(error: unknown): string {
   }
 
   return error instanceof Error ? error.message : 'Unexpected error.';
+}
+
+function addExampleScore(payload: unknown): unknown {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return payload;
+
+  const response = payload as Record<string, unknown>;
+  const company = response.data && typeof response.data === 'object' && !Array.isArray(response.data)
+    ? (response.data as Record<string, unknown>)
+    : response;
+  const scoredCompany = { ...company, example_score: buildExampleCarrierScore(company) };
+
+  return company === response ? scoredCompany : { ...response, data: scoredCompany };
 }
 
 export function createApp(config: AppConfig): express.Express {
@@ -190,7 +203,7 @@ export function createApp(config: AppConfig): express.Express {
         request.session,
         `/api/connect/v1/company/${dotNumber}?${parameters.toString()}`,
       );
-      response.json(payload);
+      response.json(addExampleScore(payload));
     } catch (error) {
       next(error);
     }

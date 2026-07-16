@@ -87,7 +87,7 @@ describe('reference app OAuth flow', () => {
     const state = new URL(authorize.headers.location).searchParams.get('state');
 
     await agent.get(`/auth/callback?code=test-code&state=${encodeURIComponent(state ?? '')}`).expect(302);
-    await agent.get('/api/company/123456?include=risk,vetting').expect(200);
+    const companyResponse = await agent.get('/api/company/123456?include=risk,vetting').expect(200);
 
     const tokenCall = calls.find((call) => call.url.endsWith('/oauth/token'));
     assert.ok(tokenCall);
@@ -107,5 +107,7 @@ describe('reference app OAuth flow', () => {
     ]);
     assert.equal(companyCall.init?.headers instanceof Headers, false);
     assert.equal((companyCall.init?.headers as Record<string, string>).Authorization, 'Bearer access-token');
+    assert.equal(companyResponse.body.data.example_score.rating, 'Elevated');
+    assert.equal(companyResponse.body.data.example_score.coverage, 'Limited');
   });
 });
