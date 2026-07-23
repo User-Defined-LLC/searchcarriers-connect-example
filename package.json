@@ -9,6 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "predev": "tsx src/check-dev-setup.ts",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/src/server.js",
     "build": "tsc",

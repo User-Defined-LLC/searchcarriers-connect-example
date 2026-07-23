@@ -79,12 +79,6 @@ SC_CLIENT_SECRET=your-client-secret
 SC_SCOPES=search company:read risk:read vetting:read watches:read
 ```
 
-For a local SearchCarriers checkout, use its local URL instead:
-
-```dotenv
-SC_BASE_URL=http://oauth2-third-party-integr.test
-```
-
 The redirect URI in SearchCarriers must exactly match `${APP_BASE_URL}/auth/callback`.
 
 The example configuration sets `SC_OAUTH_PROMPT=consent`, which deliberately shows the grant screen again when an account previously authorized the same app and scopes. SearchCarriers may otherwise reuse an existing active grant, which is standard OAuth behavior. For account-switching tests, use `SC_OAUTH_PROMPT=login consent` to require both login and consent.
@@ -94,6 +88,8 @@ The example configuration sets `SC_OAUTH_PROMPT=consent`, which deliberately sho
 ```bash
 npm run dev
 ```
+
+If required environment values are missing, this command starts an interactive setup wizard. It can generate the session secret, walks through creating the SearchCarriers app, and saves the completed values to `.env` before starting the server. In a non-interactive terminal, it prints the equivalent manual steps instead.
 
 Open [http://localhost:3000](http://localhost:3000), select **Connect SearchCarriers**, and approve the grant. Carrier Signal Desk can then search for a company, load its profile, conditionally request risk or vetting data, and calculate an illustrative Carrier Readiness Score from the data that was actually available.
 
